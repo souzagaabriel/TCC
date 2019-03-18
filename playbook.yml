@@ -1,0 +1,87 @@
+# Primeira coisa adicionaro o usuario ctic ao grupo sudo. Por padrao o acesso por senha no root e desabilitado.
+# usermod -aG sudo ctic
+- hosts: comum
+  gather_facts: False
+  pre_tasks:
+    - name: Instala o python para o Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal python-simplejson)
+      changed_when: False
+      become: true
+
+  tasks:
+
+    - name: Adicionar entrada da chave pública no /root/.ssh/authorized_keys
+      authorized_key:
+        user: root
+        state: present
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCxZ6W+iZn1dlWBBxLI3ZHup8LRGk4YpnynlG8Fm4oLdM/2fWKupyl8SJDity0m13AVQBMgpR2k/BA1HLFnWjPpxsjsA03ORTVFG3zGN8Yqb0LRuPfpXmQTQtVtGkN7FD4JKyzFeY+G4J0K3mVjOO2F8pGLvrota6q0/8fNfMsHt0uDZpC9c34qM6Xq72ZChJhnq4JY0QT6fzu2BmVnjDz4eBDlrsbtzdgkNF+z1jLdd4xSYgqFhUIrhU8Bsf6vGQMR0CRFh8huKaDCb4/y2F0NmIX0Y5ycwNfOHwvUoIYJMgv0bWv8Ewfg1MsEQ2MxN67H/4/zmMjo9jM7c40R7nmFwhm4pMMCpH8R7DoLAm4g1cKt80GXaef+7OBuluVcV6qOzaIMhBhOxjZomBgw/fjnUSjWrwJEHXNsAE8/gQLaM6OyMVl0L53FL1f8CuhQC618yge9DhM2yDw7IBxxteyA6Mp1GNPSx0HFFqisEZD0q7ZxW3PQMaTqM3Gdf+ONTP1tGbEirPn3YB3erqaYwirRNERcOpJqh/h9ahi8A9HLmSgOB0JGwKPS39ZBDU4OplIWhHY4QT6orzbrO/IkNXv7DxKQjt9N/kytVpP7MNgB6Mrepi4FDA2OUNKYCZ31c29SFOAUWjjd6K5r4W3JTbJtxVjME4/ifd6oQQHFdNIl2w== gabriel.souza@ifsc.edu.br"
+      become: true
+
+- hosts: comum
+  tasks:
+
+## Docker
+    - name: Instalar pacotes do necessarios docker
+      apt: name={{ packages }} state=latest
+      vars:
+        packages:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg2
+        - software-properties-common
+
+    - name: Adicionar a chave do repositório do docker
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Adicionar repositório do docker
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+        state: present
+        update_cache: yes
+
+    - name: Instalar o docker
+      apt: name={{ packages }} state=latest
+      vars:
+        packages:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: Adiciona no grupo docker
+      user:
+        name: "{{item}}"
+        groups: docker
+        append: yes
+      with_items:
+        - ctic
+
+# Desabilita swap
+    - name: Remove swapfile do /etc/fstab
+      mount:
+        name: swap
+        fstype: swap
+        state: absent
+
+    - name: Desabilita swap
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0
+
+    - name: Carrega modulos 
+      modprobe: name={{ modules }} state=present
+      vars:
+        modules:
+        - br_netfilter
+        - ip6_udp_tunnel
+        - ip_set
+        - ip_set_hash_ip
+        - ip_set_hash_net
+        - iptable_filter
+        - iptable_nat
+
+
+# - source list
+# - dns
+# - ntp
