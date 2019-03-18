@@ -1,0 +1,37 @@
+---
+- name: Instalar pacotes do necessários Docker
+  apt: name={{ packages }} state=latest
+  vars:
+    packages:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+
+- name: Adicionar a chave do repositório do docker
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: Adicionar repositório do docker
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+    state: present
+    update_cache: yes
+
+- name: Instalar o docker
+  apt: name={{ packages }} state=latest
+  vars:
+    packages:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name: Adiciona no grupo docker
+  user:
+    name: "{{item}}"
+    groups: docker
+    append: yes
+  with_items:
+    - ctic
