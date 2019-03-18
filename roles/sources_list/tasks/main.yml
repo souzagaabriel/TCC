@@ -1,0 +1,11 @@
+---
+- name: Arquivo do source list - Debian stretch
+  copy:
+    src: sources.list
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution_release == 'stretch'
+  notify:
+    - update apt cache
