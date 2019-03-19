@@ -9,7 +9,6 @@
       become: true
 
   tasks:
-
     - name: Adicionar entrada da chave pública no /root/.ssh/authorized_keys
       authorized_key:
         user: root
@@ -18,70 +17,70 @@
       become: true
 
 - hosts: comum
+  roles:
+    - disable_ssh_password
+    - sources_list
+    - swap_off
+    - docker
+    - ntp
+    - dns_local
+
   tasks:
 
-## Docker
-    - name: Instalar pacotes do necessarios docker
-      apt: name={{ packages }} state=latest
-      vars:
-        packages:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg2
-        - software-properties-common
+    # Verifica presença dos módulos necessários para o rke : https://rancher.com/docs/rke/v0.1.x/en/os/#operating-system
+    # - name: Carrega modulos rke
+    #   modprobe: 
+    #     name: "{{ item }}"
+    #     state: present
+    #   with_items:
+    #     - br_netfilter
+    #     - ip6_udp_tunnel
+    #     - ip_set
+    #     - ip_set_hash_ip
+    #     - ip_set_hash_net
+    #     - iptable_filter
+    #     - iptable_nat
+    #     - iptable_mangle
+    #     - iptable_raw
+    #     - nf_conntrack_netlink
+    #     - nf_conntrack
+    #     - nf_conntrack_ipv4
+    #     - nf_defrag_ipv4
+    #     - nf_nat
+    #     - nf_nat_ipv4
+    #     - nf_nat_masquerade_ipv4
+    #     - nfnetlink
+    #     - udp_tunnel
+    #     - veth
+    #     - vxlan
+    #     - x_tables
+    #     - xt_addrtype
+    #     - xt_conntrack
+    #     - xt_comment
+    #     - xt_mark
+    #     - xt_multiport
+    #     - xt_nat
+    #     - xt_recent
+    #     - xt_set
+    #     - xt_statistic
+    #     - xt_tcpudp
 
-    - name: Adicionar a chave do repositório do docker
-      apt_key:
-        url: https://download.docker.com/linux/debian/gpg
-        state: present
+    - sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: 1
+        sysctl_set: yes
 
-    - name: Adicionar repositório do docker
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
-        state: present
-        update_cache: yes
-
-    - name: Instalar o docker
-      apt: name={{ packages }} state=latest
-      vars:
-        packages:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-
-    - name: Adiciona no grupo docker
-      user:
-        name: "{{item}}"
-        groups: docker
-        append: yes
-      with_items:
-        - ctic
-
-# Desabilita swap
-    - name: Remove swapfile do /etc/fstab
-      mount:
-        name: swap
-        fstype: swap
-        state: absent
-
-    - name: Desabilita swap
-      command: swapoff -a
-      when: ansible_swaptotal_mb > 0
-
-    - name: Carrega modulos 
-      modprobe: name={{ modules }} state=present
-      vars:
-        modules:
-        - br_netfilter
-        - ip6_udp_tunnel
-        - ip_set
-        - ip_set_hash_ip
-        - ip_set_hash_net
-        - iptable_filter
-        - iptable_nat
-
-
-# - source list
-# - dns
-# - ntp
+- hosts: all
+  tasks:
+    - name: update apt cache
+      apt: update_cache=yes cache_valid_time=86400
+      when: ansible_os_family == 'Debian'
+    - name: Remove useless packages from the cache
+      apt: autoclean=yes
+      when: ansible_os_family == 'Debian'
+    - name: Remove dependencies that are no longer required
+      apt: autoremove=yes
+      when: ansible_os_family == 'Debian'
+    - name: Upgrade all packages to the latest version
+      apt: name="*" state=latest
+      when: ansible_os_family == 'Debian'
