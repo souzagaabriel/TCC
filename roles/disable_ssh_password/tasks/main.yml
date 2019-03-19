@@ -1,0 +1,8 @@
+---
+- name: Desabilita acesso ssh com senha
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    insertafter: '^#PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+  notify: restart_sshd
