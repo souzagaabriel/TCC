@@ -1,0 +1,122 @@
+---
+nodes:
+    # - address: 191.36.0.115
+    #   role: [controlplane,etcd]
+    #   hostname_override: node1rei
+    #   user: ctic
+    # - address: 191.36.0.116
+    #   role: [worker]
+    #   hostname_override: node2rei
+    #   user: ctic
+    # - address: 191.36.0.117
+    #   role: [worker]
+    #   hostname_override: node3rei
+    #   user: ctic
+    - address: 191.36.8.4
+      role: [controlplane,etcd]
+      hostname_override: node1sje
+      user: ctic
+    - address: 191.36.8.5
+      role: [worker]
+      hostname_override: node2sje
+      user: ctic
+    - address: 191.36.8.6
+      role: [worker]
+      hostname_override: node3sje
+      user: ctic
+    # - address: 191.36.X.X
+    #   role: [controlplane,etcd]
+    #   hostname_override: node1fln
+    #   user: ctic
+    # - address: 191.36.X.X2
+    #   role: [worker]
+    #   hostname_override: node2fln
+    #   user: ctic
+    # - address: 191.36.X.X3
+    #   role: [worker]
+    #   hostname_override: node3fln
+    #   user: ctic
+
+    # - address: example.com
+    #   user: ubuntu
+    #   role:
+    #     - worker
+    #   hostname_override: node3
+    #   internal_address: 192.168.1.6
+    #   labels:
+    #     app: ingress
+
+# Cluster level SSH private key
+# Used if no ssh information is set for the node
+ssh_key_path: ~/.ssh/id_rsa
+
+# Enable use of SSH agent to use SSH private keys with passphrase
+# This requires the environment `SSH_AUTH_SOCK` configured pointing to your SSH agent which has the private key added
+ssh_agent_auth: false
+
+# Set the name of the Kubernetes cluster  
+cluster_name: K8IFSC
+
+# The kubernetes version used. For now, this should match the version defined in rancher/types defaults map: https://github.com/rancher/types/blob/master/apis/management.cattle.io/v3/k8s_defaults.go#L14
+# In case the kubernetes_version and kubernetes image in system_images are defined, the system_images configuration will take precedence over kubernetes_version.
+kubernetes_version: v1.13.4-rancher1-1
+
+# System Image Tags are defaulted to a tag tied with specific kubernetes Versions
+# Default Tags: https://github.com/rancher/types/blob/master/apis/management.cattle.io/v3/k8s_defaults.go)
+system_images:
+    kubernetes: rancher/hyperkube:v1.13.4-rancher1
+
+# Currently, only authentication strategy supported is x509.
+# You can optionally create additional SANs (hostnames or IPs) to add to
+#  the API server PKI certificate.
+# This is useful if you want to use a load balancer for the control plane servers.
+authentication:
+    strategy: x509
+    # sans:
+    #   - "10.18.160.10"
+    #   - "my-loadbalancer-1234567890.us-west-2.elb.amazonaws.com"
+
+# Kubernetes Authorization mode
+# Use `mode: rbac` to enable RBAC
+# Use `mode: none` to disable authorization
+authorization:
+    mode: rbac
+
+# Add-ons are deployed using kubernetes jobs. RKE will give up on trying to get the job status after this timeout in seconds..
+# addon_job_timeout: 30
+
+# There are several network plug-ins that work, but we default to canal      
+network:
+    plugin: canal
+
+services:
+  etcd:
+    snapshot: true
+    creation: 10h0s
+    retention: 56h
+
+# Currently only nginx ingress provider is supported.
+# To disable ingress controller, set `provider: none`
+
+ingress:
+    provider: nginx
+
+# All add-on manifests MUST specify a namespace
+# addons: |-
+#     ---
+#     apiVersion: v1
+#     kind: Pod
+#     metadata:
+#       name: my-nginx
+#       namespace: default
+#     spec:
+#       containers:
+#       - name: my-nginx
+#         image: nginx
+#         ports:
+#         - containerPort: 80
+
+# addons_include:
+#     - https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/rook-operator.yaml
+#     - https://raw.githubusercontent.com/rook/rook/master/cluster/examples/kubernetes/rook-cluster.yaml
+#     - /path/to/manifest
