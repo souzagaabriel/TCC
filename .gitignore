@@ -1,2 +1,4 @@
 *.retry
 kube_config_cluster.yml
+tls*
+config*
