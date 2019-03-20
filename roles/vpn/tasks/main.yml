@@ -1,0 +1,22 @@
+---
+- name: Instalar os pacotes necessários para a VPN
+  apt: name={{ packages }} state=latest
+  vars:
+    packages:
+    - strongswan
+
+- name: Arquivo /etc/ipsec.conf
+  copy:
+    src: ipsec.conf
+    dest: /etc/ipsec.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Arquivo /etc/strongswan.conf
+  copy:
+    src: strongswan.conf
+    dest: /etc/strongswan.conf
+    owner: root
+    group: root
+    mode: 0644
