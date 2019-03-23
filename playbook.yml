@@ -1,83 +1,25 @@
 # Primeira coisa adicionaro o usuario ctic ao grupo sudo. Por padrao o acesso por senha no root e desabilitado.
-# usermod -aG sudo ctic
-- hosts: comum
-  gather_facts: False
-  pre_tasks:
-    - name: Instala o python para o Ansible
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal python-simplejson)
-      changed_when: False
-      become: true
+# $ usermod -aG sudo ctic
 
-  tasks:
-    - name: Adicionar entrada da chave pública no /root/.ssh/authorized_keys
-      authorized_key:
-        user: root
-        state: present
-        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCxZ6W+iZn1dlWBBxLI3ZHup8LRGk4YpnynlG8Fm4oLdM/2fWKupyl8SJDity0m13AVQBMgpR2k/BA1HLFnWjPpxsjsA03ORTVFG3zGN8Yqb0LRuPfpXmQTQtVtGkN7FD4JKyzFeY+G4J0K3mVjOO2F8pGLvrota6q0/8fNfMsHt0uDZpC9c34qM6Xq72ZChJhnq4JY0QT6fzu2BmVnjDz4eBDlrsbtzdgkNF+z1jLdd4xSYgqFhUIrhU8Bsf6vGQMR0CRFh8huKaDCb4/y2F0NmIX0Y5ycwNfOHwvUoIYJMgv0bWv8Ewfg1MsEQ2MxN67H/4/zmMjo9jM7c40R7nmFwhm4pMMCpH8R7DoLAm4g1cKt80GXaef+7OBuluVcV6qOzaIMhBhOxjZomBgw/fjnUSjWrwJEHXNsAE8/gQLaM6OyMVl0L53FL1f8CuhQC618yge9DhM2yDw7IBxxteyA6Mp1GNPSx0HFFqisEZD0q7ZxW3PQMaTqM3Gdf+ONTP1tGbEirPn3YB3erqaYwirRNERcOpJqh/h9ahi8A9HLmSgOB0JGwKPS39ZBDU4OplIWhHY4QT6orzbrO/IkNXv7DxKQjt9N/kytVpP7MNgB6Mrepi4FDA2OUNKYCZ31c29SFOAUWjjd6K5r4W3JTbJtxVjME4/ifd6oQQHFdNIl2w== gabriel.souza@ifsc.edu.br"
-      become: true
-    - name: Adicionar entrada da chave pública no /root/.ssh/authorized_keys
-      authorized_key:
-        user: ctic
-        state: present
-        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCxZ6W+iZn1dlWBBxLI3ZHup8LRGk4YpnynlG8Fm4oLdM/2fWKupyl8SJDity0m13AVQBMgpR2k/BA1HLFnWjPpxsjsA03ORTVFG3zGN8Yqb0LRuPfpXmQTQtVtGkN7FD4JKyzFeY+G4J0K3mVjOO2F8pGLvrota6q0/8fNfMsHt0uDZpC9c34qM6Xq72ZChJhnq4JY0QT6fzu2BmVnjDz4eBDlrsbtzdgkNF+z1jLdd4xSYgqFhUIrhU8Bsf6vGQMR0CRFh8huKaDCb4/y2F0NmIX0Y5ycwNfOHwvUoIYJMgv0bWv8Ewfg1MsEQ2MxN67H/4/zmMjo9jM7c40R7nmFwhm4pMMCpH8R7DoLAm4g1cKt80GXaef+7OBuluVcV6qOzaIMhBhOxjZomBgw/fjnUSjWrwJEHXNsAE8/gQLaM6OyMVl0L53FL1f8CuhQC618yge9DhM2yDw7IBxxteyA6Mp1GNPSx0HFFqisEZD0q7ZxW3PQMaTqM3Gdf+ONTP1tGbEirPn3YB3erqaYwirRNERcOpJqh/h9ahi8A9HLmSgOB0JGwKPS39ZBDU4OplIWhHY4QT6orzbrO/IkNXv7DxKQjt9N/kytVpP7MNgB6Mrepi4FDA2OUNKYCZ31c29SFOAUWjjd6K5r4W3JTbJtxVjME4/ifd6oQQHFdNIl2w== gabriel.souza@ifsc.edu.br"
-      become: true
-
-- hosts: comum
+- hosts: all
+  become: true
+  become_method: su
   roles:
+    - conf_inicial
     - disable_ssh_password
     - sources_list
     - swap_off
     - docker
     - ntp
     - dns_local
-
-  tasks:
-
-    # Verifica presença dos módulos necessários para o rke : https://rancher.com/docs/rke/v0.1.x/en/os/#operating-system
-    # - name: Carrega modulos rke
-    #   modprobe: 
-    #     name: "{{ item }}"
-    #     state: present
-    #   with_items:
-    #     - br_netfilter
-    #     - ip6_udp_tunnel
-    #     - ip_set
-    #     - ip_set_hash_ip
-    #     - ip_set_hash_net
-    #     - iptable_filter
-    #     - iptable_nat
-    #     - iptable_mangle
-    #     - iptable_raw
-    #     - nf_conntrack_netlink
-    #     - nf_conntrack
-    #     - nf_conntrack_ipv4
-    #     - nf_defrag_ipv4
-    #     - nf_nat
-    #     - nf_nat_ipv4
-    #     - nf_nat_masquerade_ipv4
-    #     - nfnetlink
-    #     - udp_tunnel
-    #     - veth
-    #     - vxlan
-    #     - x_tables
-    #     - xt_addrtype
-    #     - xt_conntrack
-    #     - xt_comment
-    #     - xt_mark
-    #     - xt_multiport
-    #     - xt_nat
-    #     - xt_recent
-    #     - xt_set
-    #     - xt_statistic
-    #     - xt_tcpudp
-
-    - sysctl:
-        name: net.bridge.bridge-nf-call-iptables
-        value: 1
-        sysctl_set: yes
+    - modulos_kernel_rke
 
 - hosts: all
+  become: true
+  become_method: su
   tasks:
+    - name: Instalar o aptitude, necessario para o modulo apt
+      apt: name=aptitude state=latest
     - name: update apt cache
       apt: update_cache=yes cache_valid_time=86400
       when: ansible_os_family == 'Debian'
