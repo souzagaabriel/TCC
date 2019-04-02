@@ -3,15 +3,48 @@
   apt: name={{ packages }} state=latest
   vars:
     packages:
-    - strongswan
+    - strongswan-ikev2
 
-- name: Arquivo /etc/ipsec.conf
+- name: Arquivo ipsec.secrets
   copy:
-    src: ipsec.conf
+    src: ipsec.secrets
+    dest: /etc/ipsec.secrets
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Arquivo fln_ipsec.conf
+  copy:
+    src: fln_ipsec.conf
     dest: /etc/ipsec.conf
     owner: root
     group: root
     mode: 0644
+  when: ansible_default_ipv4.address == '172.16.0.94'
+  notify:
+    - restarted strongSwan
+
+- name: Arquivo rei_ipsec.conf
+  copy:
+    src: rei_ipsec.conf
+    dest: /etc/ipsec.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_default_ipv4.address == '191.36.0.118'
+  notify:
+    - restarted strongSwan
+
+- name: Arquivo sje_ipsec.conf
+  copy:
+    src: sje_ipsec.conf
+    dest: /etc/ipsec.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_default_ipv4.address == '191.36.8.7'
+  notify:
+    - restarted strongSwan
 
 - name: Arquivo /etc/strongswan.conf
   copy:
@@ -20,3 +53,11 @@
     owner: root
     group: root
     mode: 0644
+  notify:
+    - restarted strongSwan
+
+- name: Enable/Start strongSwan
+  service:
+    name: strongswan
+    state: started
+    enabled: yes
