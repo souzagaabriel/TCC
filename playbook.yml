@@ -4,6 +4,16 @@
 - hosts: all
   become: true
   become_method: su
+  gather_facts: False
+  pre_tasks:
+    - name: Instala o python para o Ansible
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal python-simplejson sudo vim)
+      changed_when: False
+      become: true
+
+- hosts: all
+  become: true
+  become_method: su
   roles:
     - conf_inicial
     - disable_ssh_password
@@ -13,6 +23,7 @@
     - ntp
     - dns_local
     - modulos_kernel_rke
+    - vpn
 
 - hosts: all
   become: true
