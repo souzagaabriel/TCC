@@ -1,8 +1,4 @@
 ---
-- name: Instala o python para o Ansible
-  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal python-simplejson sudo)
-  changed_when: False
-
 - name: Adicionar entrada da chave pública no /root/.ssh/authorized_keys
   authorized_key:
     user: root
