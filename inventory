@@ -1,35 +1,33 @@
 [rei]
-191.36.0.115
-191.36.0.116
-191.36.0.117
-191.36.0.118
+rei-node1 ansible_host=191.36.0.115
+rei-node2 ansible_host=191.36.0.116 
+rei-node3 ansible_host=191.36.0.117
+rei-node-vpn ansible_host=191.36.0.118
 
 [sje]
-191.36.8.4
-191.36.8.5
-191.36.8.6
-191.36.8.7
+sje-node1 ansible_host=191.36.8.4
+sje-node2 ansible_host=191.36.8.5
+sje-node3 ansible_host=191.36.8.6
+sje-node-vpn ansible_host=191.36.8.7
 
 [fln]
-200.135.184.91
-200.135.184.92
-200.135.184.93
-200.135.184.94
+fln-node1 ansible_host=200.135.184.91
+fln-node2 ansible_host=200.135.184.92
+fln-node3 ansible_host=200.135.184.93
+fln-node-vpn ansible_host=200.135.184.94
 
 [vpn]
-191.36.0.118
-191.36.8.7
-200.135.184.94
+rei-node-vpn
+sje-node-vpn
+fln-node-vpn
 
 [worker]
-191.36.0.116
-191.36.0.117
-191.36.8.5
-191.36.8.6
-200.135.184.92
-200.135.184.93
+rei-node[2:3]
+sje-node[2:3]
+fln-node[2:3]
+
 
 [master]
-191.36.0.115
-191.36.8.4
-200.135.184.91
+rei-node1
+sje-node1
+fln-node1
