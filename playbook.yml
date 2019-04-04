@@ -23,7 +23,18 @@
     - ntp
     - dns_local
     - modulos_kernel_rke
+
+- hosts: vpn
+  become: true
+  become_method: su
+  roles:
     - vpn
+
+- hosts: sje,rei,fln
+  become: true
+  become_method: su
+  roles:
+    - rota_vpn
 
 - hosts: all
   become: true
