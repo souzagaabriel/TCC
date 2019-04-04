@@ -2,24 +2,21 @@
 rei-node1 ansible_host=191.36.0.115
 rei-node2 ansible_host=191.36.0.116 
 rei-node3 ansible_host=191.36.0.117
-rei-node-vpn ansible_host=191.36.0.118
 
 [sje]
 sje-node1 ansible_host=191.36.8.4
 sje-node2 ansible_host=191.36.8.5
 sje-node3 ansible_host=191.36.8.6
-sje-node-vpn ansible_host=191.36.8.7
 
 [fln]
 fln-node1 ansible_host=200.135.184.91
 fln-node2 ansible_host=200.135.184.92
 fln-node3 ansible_host=200.135.184.93
-fln-node-vpn ansible_host=200.135.184.94
 
 [vpn]
-rei-node-vpn
-sje-node-vpn
-fln-node-vpn
+rei-node-vpn ansible_host=191.36.0.118
+sje-node-vpn ansible_host=191.36.8.7
+fln-node-vpn ansible_host=200.135.184.94
 
 [worker]
 rei-node[2:3]
