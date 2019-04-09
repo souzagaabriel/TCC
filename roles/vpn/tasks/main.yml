@@ -13,6 +13,14 @@
     group: root
     mode: 0644
 
+- name: Habilitar roteamento
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
 - name: Arquivo fln_ipsec.conf
   copy:
     src: fln_ipsec.conf
