@@ -9,3 +9,9 @@
         - "pool.ntp.br iburst"
         - "ntp.cais.rnp.br iburst"
         - "ntp.ufsc.br iburst"
+
+- name: Instalar os pacotes ntpdate
+  apt: name={{ packages }} state=latest
+  vars:
+    packages:
+    - ntpdate
