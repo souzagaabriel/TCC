@@ -13,7 +13,7 @@ spec:
   tls:
    - hosts:
      - cephifsc.sj.ifsc.edu.br
-     secretName: tls-rancher-ingress
+     secretName: tls-rookceph-ingress
   rules:
   - host: cephifsc.sj.ifsc.edu.br
     http:
