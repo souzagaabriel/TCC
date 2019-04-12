@@ -24,3 +24,13 @@ Install operator rook
 
 helm repo add rook-stable https://charts.rook.io/stable
 helm install --namespace rook-ceph-system rook-stable/rook-ceph
+
+Crate cluster
+
+kubectl create -f rook_conf/cluster.yaml
+
+kubectl -n rook-ceph create secret tls tls-rookceph-ingress --cert=tls.crt --key=tls.key
+
+kubectl create -f rook_conf/dashboard-ingress-https.yaml
+
+kubectl create -f rook_conf/storageclass.yaml
