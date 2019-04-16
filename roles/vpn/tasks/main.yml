@@ -22,6 +22,30 @@
     state: present
     reload: yes
 
+- name: Habilitar roteamento 2
+  sysctl:
+    name: net.ipv4.conf.all.accept_redirects
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Habilitar roteamento 3
+  sysctl:
+    name: net.ipv4.conf.all.send_redirects
+    value: 0
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Habilitar roteamento 4
+  sysctl:
+    name: net.ipv4.ip_no_pmtu_disc
+    value: 1
+    sysctl_set: yes
+    state: present
+    reload: yes
+
 - name: Arquivo fln_ipsec.conf
   copy:
     src: fln_ipsec.conf
