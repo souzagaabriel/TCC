@@ -4,6 +4,7 @@
   vars:
     packages:
     - strongswan-ikev2
+    - libstrongswan-extra-plugins
 
 - name: Arquivo ipsec.secrets
   copy:
