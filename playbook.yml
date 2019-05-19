@@ -44,6 +44,8 @@
       apt: name=aptitude state=latest
     - name: Instalar o open-iscsi, necessario para o modulo longhorn
       apt: name=open-iscsi state=latest
+    - name: Instalar o lvm2, necessario para o rook
+      apt: name=lvm2 state=latest
     - name: update apt cache
       apt: update_cache=yes cache_valid_time=86400
       when: ansible_os_family == 'Debian'
