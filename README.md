@@ -1,41 +1,42 @@
 # TCC
 
-kubectl -n kube-system create serviceaccount tiller
+Criando o cluster kubernetes:
+```$ rke up```
 
-kubectl create clusterrolebinding tiller \
+Habilitando o uso do helm:
+
+```$ kubectl -n kube-system create serviceaccount tiller```
+
+```$ kubectl create clusterrolebinding tiller \
   --clusterrole=cluster-admin \
-  --serviceaccount=kube-system:tiller
+  --serviceaccount=kube-system:tiller```
 
-helm init --service-account tiller
+```$ helm init --service-account tiller```
 
+Instalando o Rancher:
 
-Criar o namespace cattle-system:
-
-kubectl create ns cattle-system
+```$ kubectl create ns cattle-system```
 
 Criar a chave:
 
-kubectl -n cattle-system create secret tls tls-rancher-ingress \
+```$ kubectl -n cattle-system create secret tls tls-rancher-ingress \
   --cert=tls.crt \
-  --key=tls.key
+  --key=tls.key```
 
-Install Rancher:
-
-helm install rancher-latest/rancher \
+$ ```helm install rancher-latest/rancher \
   --name rancher \
   --namespace cattle-system \
   --set hostname=rancherifsc.sj.ifsc.edu.br \
-  --set ingress.tls.source=tls-rancher-ingress
+  --set ingress.tls.source=tls-rancher-ingress```
 
 
-Install operator rook
+Instalando o rook:
 
-helm repo add rook-stable https://charts.rook.io/stable
-helm install --namespace rook-ceph-system rook-stable/rook-ceph
+```$ kubectl create -f rook_conf/common.yaml```
 
-Crate cluster
+```$ kubectl create -f rook_conf/operator.yaml```
 
-kubectl create -f rook_conf/cluster.yaml
+```$ kubectl create -f rook_conf/cluster.yaml```
 
 kubectl -n rook-ceph create secret tls tls-rookceph-ingress --cert=tls.crt --key=tls.key
 
