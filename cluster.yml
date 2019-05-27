@@ -5,7 +5,7 @@ nodes:
       hostname_override: node1sje
       user: ctic
     - address: 191.36.8.5
-      role: [worker,controlplane,etcd]
+      role: [worker]
       hostname_override: node2sje
       user: ctic
     - address: 191.36.8.6
@@ -17,7 +17,7 @@ nodes:
       hostname_override: node1rei
       user: ctic
     - address: 191.36.0.116
-      role: [worker,controlplane,etcd]
+      role: [worker]
       hostname_override: node2rei
       user: ctic
     - address: 191.36.0.117
@@ -30,7 +30,7 @@ nodes:
       hostname_override: node1fln
       user: ctic
     - address: 200.135.184.92
-      role: [worker,controlplane,etcd]
+      role: [worker]
       internal_address: 172.16.0.92
       hostname_override: node2fln
       user: ctic
