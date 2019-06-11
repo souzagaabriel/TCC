@@ -12,16 +12,16 @@
   lineinfile:
     path: /etc/network/interfaces
     regexp: '^post-up route add -net 172.16.0.80'
-    # line: 'post-up route add -net 172.16.0.80 netmask 255.255.255.240 gw 191.36.8.7'
-    state: absent
+    line: 'post-up route add -net 172.16.0.80 netmask 255.255.255.240 gw 191.36.8.7'
+    # state: absent
   when: group_names | select('search','sje') | list | count > 0
 
 - name: Adiciona rota SJE -> REI
   lineinfile:
     path: /etc/network/interfaces
     regexp: '^post-up route add -net 191.36.0.112'
-    # line: 'post-up route add -net 191.36.0.112 netmask 255.255.255.248 gw 191.36.8.7'
-    state: absent
+    line: 'post-up route add -net 191.36.0.112 netmask 255.255.255.248 gw 191.36.8.7'
+    # state: absent
   when: group_names | select('search','sje') | list | count > 0
 
 
@@ -31,16 +31,16 @@
   lineinfile:
     path: /etc/network/interfaces
     regexp: '^post-up route add -net 191.36.8.0'
-    # line: 'post-up route add -net 191.36.8.0 netmask 255.255.255.240 gw 172.16.0.94'
-    state: absent
+    line: 'post-up route add -net 191.36.8.0 netmask 255.255.255.240 gw 172.16.0.94'
+    # state: absent
   when: group_names | select('search','fln') | list | count > 0
 
 - name: Adiciona rota FLN -> REI
   lineinfile:
     path: /etc/network/interfaces
     regexp: '^post-up route add -net 191.36.0.112'
-    # line: 'post-up route add -net 191.36.0.112 netmask 255.255.255.248 gw 172.16.0.94'
-    state: absent
+    line: 'post-up route add -net 191.36.0.112 netmask 255.255.255.248 gw 172.16.0.94'
+    # state: absent
   when: group_names | select('search','fln') | list | count > 0
 
 
@@ -50,16 +50,16 @@
   lineinfile:
     path: /etc/network/interfaces
     regexp: '^post-up route add -net 172.16.0.80'
-    # line: 'post-up route add -net 172.16.0.80 netmask 255.255.255.240 gw 191.36.0.118'
-    state: absent
+    line: 'post-up route add -net 172.16.0.80 netmask 255.255.255.240 gw 191.36.0.118'
+    # state: absent
   when: group_names | select('search','rei') | list | count > 0
 
 - name: Adiciona rota REI -> SJE
   lineinfile:
     path: /etc/network/interfaces
     regexp: '^post-up route add -net 191.36.8.0'
-    # line: 'post-up route add -net 191.36.8.0 netmask 255.255.255.240 gw 191.36.0.118'
-    state: absent
+    line: 'post-up route add -net 191.36.8.0 netmask 255.255.255.240 gw 191.36.0.118'
+    # state: absent
   when: group_names | select('search','rei') | list | count > 0
 
 # - name: Reboot mas maquinas

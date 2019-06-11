@@ -17,14 +17,3 @@ fln-node3 ansible_host=200.135.184.93
 rei-node-vpn ansible_host=191.36.0.118
 sje-node-vpn ansible_host=191.36.8.7
 fln-node-vpn ansible_host=200.135.184.94
-
-[worker]
-rei-node[2:3]
-sje-node[2:3]
-fln-node[2:3]
-
-
-[master]
-rei-node1
-sje-node1
-fln-node1

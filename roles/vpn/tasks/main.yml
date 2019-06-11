@@ -92,5 +92,5 @@
 - name: Enable/Start strongSwan
   service:
     name: strongswan
-    state: stopped
+    state: started
     enabled: no
