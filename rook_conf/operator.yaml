@@ -10,7 +10,7 @@
 # - operator-openshift.yaml: Common settings for running in OpenShift
 # - operator-with-csi.yaml: Enable the ceph-csi driver
 #################################################################################################################
-# OLM: BEGIN OPERATOR DEPLOYMENT
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,7 +32,7 @@ spec:
       serviceAccountName: rook-ceph-system
       containers:
       - name: rook-ceph-operator
-        image: rook/ceph:master
+        image: rook/ceph:v1.0.2
         args: ["ceph", "operator"]
         volumeMounts:
         - mountPath: /var/lib/rook
@@ -136,4 +136,3 @@ spec:
         emptyDir: {}
       - name: default-config-dir
         emptyDir: {}
-# OLM: END OPERATOR DEPLOYMENT
