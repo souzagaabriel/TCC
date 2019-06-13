@@ -13,12 +13,28 @@ spec:
   dashboard:
     enabled: true
   storage:
-    useAllNodes: true
+    useAllNodes: false
     useAllDevices: true
     deviceFilter:
-    config:
-      databaseSizeMB: "1024" # this value can be removed for environments with normal sized disks (100 GB or larger)
-      journalSizeMB: "1024"  # this value can be removed for environments with normal sized disks (20 GB or larger)
-      osdsPerDevice: "1" # this value can be overridden at the node or device level
+    location:
     directories:
     - path: /var/lib/rook
+    nodes:
+    - name: "node1fln"
+      location: datacenter=fln   
+    - name: "node2fln"
+      location: datacenter=fln 
+    - name: "node3fln"
+      location: datacenter=fln
+    - name: "node1rei"
+      location: datacenter=rei   
+    - name: "node2rei"
+      location: datacenter=rei 
+    - name: "node3rei"
+      location: datacenter=rei 
+    - name: "node1sje"
+      location: datacenter=sje   
+    - name: "node2sje"
+      location: datacenter=sje 
+    - name: "node3sje"
+      location: datacenter=sje

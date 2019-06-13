@@ -38,6 +38,8 @@ Instalando o rook:
 
 ```$ kubectl create -f rook_conf/cluster.yaml```
 
+```$ kubectl create -f rook_conf/CephBlockPool.yaml```
+
 kubectl -n rook-ceph create secret tls tls-rookceph-ingress --cert=tls.crt --key=tls.key
 
 kubectl create -f rook_conf/dashboard-ingress-https.yaml
