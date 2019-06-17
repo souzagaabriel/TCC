@@ -1,0 +1,75 @@
+image:
+  registry: docker.io
+  repository: bitnami/moodle
+  tag: 3.7.0-debian-9-r24
+  pullPolicy: IfNotPresent
+
+moodleUsername: user
+moodlePassword: password
+moodleEmail: user@example.com
+allowEmptyPassword: "yes"
+
+mariadb:
+  enabled: true
+  replication:
+    enabled: false
+  db:
+    name: bitnami_moodle
+    user: bn_moodle
+    # password:
+  # rootUser:
+  #   password:
+
+  master:
+    persistence:
+      enabled: true
+      storageClass: "rook-ceph-block"
+      accessMode: ReadWriteOnce
+      size: 8Gi
+
+service:
+  type: ClusterIP
+  port: 80
+  httpsPort: 443
+  nodePorts:
+    http: ""
+    https: ""
+  externalTrafficPolicy: Cluster
+
+ingress:
+  enabled: true
+  hosts:
+  - name: moodleifsc.sj.ifsc.edu.br
+    tls: true
+    certManager: false
+    tlsSecret: tls-ingress
+    annotations:
+  secrets:
+
+persistence:
+  enabled: true
+  storageClass: "rook-ceph-block"
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+resources:
+  requests:
+    memory: 512Mi
+    cpu: 300m
+
+livenessProbe:
+  initialDelaySeconds: 600
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+  successThreshold: 1
+readinessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 6
+  successThreshold: 1
+
+podAnnotations: {}
+metrics:
+  enabled: false

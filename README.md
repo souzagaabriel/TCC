@@ -19,9 +19,7 @@ Instalando o Rancher:
 
 Criar a chave:
 
-```$ kubectl -n cattle-system create secret tls tls-rancher-ingress \
-  --cert=tls.crt \
-  --key=tls.key```
+```$ kubectl -n cattle-system create secret tls tls-rancher-ingress   --cert=tls.crt --key=tls.key```
 
 $ ```helm install rancher-latest/rancher \
   --name rancher \
