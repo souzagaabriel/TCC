@@ -38,8 +38,14 @@ Instalando o rook:
 
 ```$ kubectl create -f rook_conf/CephBlockPool.yaml```
 
-kubectl -n rook-ceph create secret tls tls-rookceph-ingress --cert=tls.crt --key=tls.key
+```$ kubectl -n rook-ceph create secret tls tls-rookceph-ingress --cert=tls.crt --key=tls.key```
 
-kubectl create -f rook_conf/dashboard-ingress-https.yaml
+```$ kubectl create -f rook_conf/dashboard-ingress-https.yaml```
 
-kubectl create -f rook_conf/storageclass.yaml
+```$ kubectl create -f rook_conf/storageclass.yaml```
+
+Instalando as aplicações moodle e owncloud via Helm:```
+
+```$ helm install --name moodle-ifsc -f services/values-moodle.yaml stable/moodle```
+
+```$ helm install --name owncloud-ifsc -f services/values-owncloud.yml stable/owncloud```
